@@ -29,31 +29,26 @@ int main(int argc, char** argv)
 
 	//Store the command line arguments
 	string cipherN = argv[1];
-	string cipherK = argv[2];
+	char* cipherK  = argv[2];
 	string cipherM = argv[3];
-	string cipherIP = argv[4];
-	string cipherOP = argv[5];
+	char* cipherIP = argv[4];
+	char* cipherOP = argv[5];
 
-	//File objects
-	fstream inputFile, outputFile;			
-	inputFile.open (cipherIP, ios::in );	
+	//Create a file object to read the file
+	FILE* fp = fopen(cipherIP, "r");
 
-	//Error checks for file
-	if(!inputFile){
-		fprintf(stderr, "ERROR: Invalid file\n");
+	//The buffer to store the read text
+	char buffer[17];
+
+	//The number of bytes read
+	int numRead = 0;
+
+	//Checks if file was opened
+	if(!fp){
+		perror("fopen");
 		exit(-1);
 	}
 
-	//Store the contents of the file into a string
-	string fileContents;					
-	while(!inputFile.eof()){
-		inputFile >> fileContents;
-	}
-	
-	//Closing file afer open
-	if (inputFile.is_open()){
-		inputFile.close();
-	}
 
 	//Print menu if all error checks are passed successfully
 	cout << "AES && DES Program\n";
@@ -62,7 +57,7 @@ int main(int argc, char** argv)
 	}
 	cout << "\n";
 
-	/* Create an instance of the DES cipher */	
+	/* Create an instance of the cipher */	
 	CipherInterface* cipher = NULL; 
 
 	//Create DES object
@@ -84,6 +79,7 @@ int main(int argc, char** argv)
 		__FILE__, __FUNCTION__, __LINE__);
 		exit(-1);
 	}
+
 	
 
 	/* Set the encryption key
@@ -92,7 +88,9 @@ int main(int argc, char** argv)
 	 * Your program should take input from
 	 * command line.
 	 */
-	cipher->setKey((unsigned char*)"0123456789abcdef");
+	// cipher->setKey((unsigned char*)"0123456789abcdef");
+	cipher->setKey((unsigned char*)cipherK);
+	
 	
 	/* Perform encryption */
 	//string cipherText = cipher->encrypt("hello world");
