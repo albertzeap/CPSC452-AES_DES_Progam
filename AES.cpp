@@ -39,7 +39,7 @@ bool AES::setKey(const unsigned char* keyArray)
 	}
 
 	/* AES-128 bit ECB Encryption key */
-	AES_KEY enc_key, dec_key;
+	// AES_KEY enc_key, dec_key;
 	
 
 	if(keyArray[0] == 0){
@@ -81,6 +81,15 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	//	2. Use AES_ecb_encrypt(...) to encrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the ciphertext
+
+	//Buffers for string text
+	unsigned char enc_out[17];
+	
+	/* Clear both buffers */
+	memset(enc_out, 0, 17);
+
+	//Encrypt the text
+	AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
 		
 	return NULL;	
 }
@@ -97,6 +106,15 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	//	2. Use AES_ecb_encrypt(...) to decrypt the text (please see the URL in setKey(...)
 	//	and the aes.cpp example provided.
 	// 	3. Return the pointer to the plaintext
+
+	//Buffers for string text
+	unsigned char dec_out[17];
+
+	//Clear both buffers
+	memset(dec_out, 0, 17);
+
+	// Decrypt!
+	AES_ecb_encrypt(cipherText, dec_out, &dec_key, AES_DECRYPT);
 		
 	return NULL;
 }
