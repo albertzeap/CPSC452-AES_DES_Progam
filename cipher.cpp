@@ -29,10 +29,13 @@ int main(int argc, char** argv)
 
 	//Store the command line arguments
 	string cipherN = argv[1];
-	char* cipherK  = argv[2];
+	string cipherK = argv[2];
 	string cipherM = argv[3];
 	char* cipherIP = argv[4];
 	char* cipherOP = argv[5];
+
+	//Variable for valid key
+	char* validKey;
 
 	//Create a file object to read the file
 	FILE* fp = fopen(cipherIP, "r");
@@ -43,11 +46,24 @@ int main(int argc, char** argv)
 	//The number of bytes read
 	int numRead = 0;
 
-	//Checks if file was opened
+	//Checks if file was not opened
 	if(!fp){
 		perror("fopen");
 		exit(-1);
 	}
+
+
+	//Checks if key is a valid length
+	if (cipherK.length() != 16){
+		fprintf(stderr, "INVALID KEY: Key needs to be 16 bytes long");
+		exit(-1);
+	}
+	else {
+
+		//Initializes the valid key
+		validKey = &cipherK[0];
+	}
+	
 
 
 	//Print menu if all error checks are passed successfully
@@ -80,7 +96,6 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-	
 
 	/* Set the encryption key
 	 * A valid key comprises 16 hexidecimal
@@ -89,14 +104,14 @@ int main(int argc, char** argv)
 	 * command line.
 	 */
 	// cipher->setKey((unsigned char*)"0123456789abcdef");
-	cipher->setKey((unsigned char*)cipherK);
-	
-	
+	cipher->setKey((unsigned char*)validKey);
+
 	/* Perform encryption */
-	//string cipherText = cipher->encrypt("hello world");
+	// unsigned char* cipherText = cipher->encrypt((unsigned char*)"hello world");
+	
 	
 	/* Perform decryption */
-	//cipher->decrypt(cipherText);	
+	// cipher->decrypt(cipherText);	
 	
 	return 0;
 }

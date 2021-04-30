@@ -26,11 +26,13 @@ bool AES::setKey(const unsigned char* keyArray)
 	// and aes.cpp example provided with the assignment.
 	
 	
-	unsigned char aes_key[16];
-	memset(aes_key, 0, 16);
+	// unsigned char aes_key[16];
+	// memset(aes_key, 0, 16);
+
+	unsigned char* aes_key = new unsigned char[16];
 	
-	cout << "Size of Key Array: " << sizeof(keyArray) << "\n";
-	cout << "Key Array: " << keyArray << "\n";
+	// cout << "Size of Key Array: " << sizeof(keyArray) << "\n";
+	// cout << "Key Array: " << keyArray << "\n";
 
 	for(int i = 1; i < 17; ++i){
 		aes_key[i - 1] = keyArray[i];
@@ -83,15 +85,23 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	// 	3. Return the pointer to the ciphertext
 
 	//Buffers for string text
-	unsigned char enc_out[17];
+	// unsigned char *enc_out = new unsigned char;
+	unsigned char buffer[16];
+	unsigned char* enc_out = new unsigned char[16];
 	
-	/* Clear both buffers */
-	memset(enc_out, 0, 17);
+	//Clear both buffers 
+	memset(enc_out, 0, 16);
+	memset(buffer, 0, 16);
 
 	//Encrypt the text
-	AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
+	// AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
+	AES_ecb_encrypt(plainText, buffer, &enc_key, AES_ENCRYPT);
 		
-	return NULL;	
+	for (int i = 0; i < 16; ++i){
+		enc_out[i] = buffer[i];
+	}
+
+	return enc_out;	
 }
 
 /**
@@ -108,15 +118,15 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	// 	3. Return the pointer to the plaintext
 
 	//Buffers for string text
-	unsigned char dec_out[17];
+	unsigned char* dec_out = new unsigned char;
 
-	//Clear both buffers
+	//Clear buffer
 	memset(dec_out, 0, 17);
 
 	// Decrypt!
 	AES_ecb_encrypt(cipherText, dec_out, &dec_key, AES_DECRYPT);
 		
-	return NULL;
+	return dec_out;
 }
 
 
