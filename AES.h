@@ -52,6 +52,20 @@ class AES: public CipherInterface
 	protected:
 		AES_KEY enc_key, dec_key;
 		//TODO: declare the AES key
+
+		/**
+		 * Converts two characters into a hex integers
+		 * and then inserts the integers into the higher
+		 * and lower bits of the byte
+		 */
+		unsigned char twoCharToHexByte(const unsigned char* twoChars);
+
+		/**
+		 * Converts a character into a hexidecimal integer
+		 * @param character - the character to convert
+		 * @return - the converted character, or 'z' on error
+		 */
+		unsigned char charToHex(const char& character);
 };
 
 

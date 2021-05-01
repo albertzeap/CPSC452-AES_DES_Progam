@@ -1,6 +1,71 @@
 #include "AES.h"
 
 /**
+ * Converts a character into a hexidecimal integer
+ * @param character - the character to convert
+ * @return - the converted character, or 'z' on error
+ */
+unsigned char AES::charToHex(const char& character)
+{
+	/* Is the first digit 0-9 ? */	
+	if(character >= '0' && character <= '9')	
+		/* Convert the character to hex */
+		return character - '0';
+	/* It the first digit a letter 'a' - 'f'? */
+	else if(character >= 'a' && character <= 'f')
+		/* Conver the cgaracter to hex */
+		return (character - 97) + 10;	
+	/* Invalid character */
+	else return 'z';
+}
+
+
+/**
+ * Converts two characters into a hex integers
+ * and then inserts the integers into the higher
+ * and lower bits of the byte
+ * @param twoChars - two charcters representing the
+ * the hexidecimal nibbles of the byte.
+ * @param twoChars - the two characters
+ * @return - the byte containing having the
+ * valud of two characters e.g. string "ab"
+ * becomes hexidecimal integer 0xab.
+ */
+unsigned char AES::twoCharToHexByte(const unsigned char* twoChars)
+{
+	/* The byte */
+	unsigned char singleByte;
+	
+	/* The second character */
+	unsigned char secondChar;
+
+	/* Convert the first character */
+	if((singleByte = charToHex(twoChars[0])) == 'z') 
+	{
+		/* Invalid digit */
+		return 'z';
+	}
+	
+	/* Move the newly inserted nibble from the
+	 * lower to upper nibble.
+	 */
+	singleByte = (singleByte << 4);
+	
+	/* Conver the second character */
+	if((secondChar = charToHex(twoChars[1])) == 'z')
+		return 'z'; 
+	
+	/* Insert the second value into the lower nibble */	
+	singleByte |= secondChar;
+
+	return singleByte;
+}
+
+
+
+
+
+/**
  * Sets the key to use
  * @param key - the first byte of this represents whether
  * to encrypt or to decrypt. 00 means encrypt and any other
@@ -17,7 +82,7 @@ bool AES::setKey(const unsigned char* keyArray)
 	//
 	// One way to solve this problem is to pass in a 17 byte key, where
 	// the first byte is used to indicate whether we are encrypting or
-	// decrypting. E.g., if the first byte is 0, then use AES_set_encrypt_key(...).
+	// decrypting. E.g., if the first byte is 00, then use AES_set_encrypt_key(...).
 	// Otherwise, use AES_set_decrypt_key(...).  The rest of the bytes in the
 	// array indicate the 16 bytes of the 128-bit AES key.
 	//

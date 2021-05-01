@@ -26,7 +26,6 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-
 	//Store the command line arguments
 	string cipherN = argv[1];
 	string cipherK = argv[2];
@@ -52,20 +51,12 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
-
-	//Checks if key is a valid length
-	if (cipherK.length() != 16){
-		fprintf(stderr, "INVALID KEY: Key needs to be 16 bytes long");
+	//Checks for proper mode before continuing program
+	if (cipherM != "ENC" && cipherM != "DEC"){
+		fprintf(stderr, "INVALID MODE: <ENC> || <DEC>\n");
 		exit(-1);
 	}
-	else {
-
-		//Initializes the valid key
-		validKey = &cipherK[0];
-	}
 	
-
-
 	//Print menu if all error checks are passed successfully
 	cout << "AES && DES Program\n";
 	for(int i = 0; i < 45; ++i){
@@ -79,12 +70,38 @@ int main(int argc, char** argv)
 	//Create DES object
 	if(cipherN == "DES"){
 		cout << "BLOCK CIPHER: DES\n";
+
+		//Checks if key is a valid length
+		if (cipherK.length() != 16){
+		fprintf(stderr, "INVALID KEY: Key needs to be 16 characters long\n");
+		exit(-1);
+		}
+		else {
+
+			//Initializes the valid key
+			validKey = &cipherK[0];
+		}	
+
+		//Create a DES object
 		cipher = new DES();
 	}
 
 	//Create AES object
 	if(cipherN == "AES"){
 		cout << "BLOCK CIPHER: AES\n";
+
+		//Checks if key is a valid length
+		if (cipherK.length() != 32){
+			fprintf(stderr, "INVALID KEY: Key needs to be 32 characters long\n");
+			exit(-1);
+		}
+		else {
+
+			//Initializes the valid key
+			validKey = &cipherK[0];
+		}
+
+		//Create an AES object
 		cipher = new AES();
 	}
 
@@ -103,15 +120,22 @@ int main(int argc, char** argv)
 	 * Your program should take input from
 	 * command line.
 	 */
+
+	
 	// cipher->setKey((unsigned char*)"0123456789abcdef");
 	cipher->setKey((unsigned char*)validKey);
 
+
 	/* Perform encryption */
-	// unsigned char* cipherText = cipher->encrypt((unsigned char*)"hello world");
-	
-	
+	if (cipherM == "ENC"){
+
+		// string cipherText = cipher->encrypt((unsigned char*)"hello world");
+	}
+
 	/* Perform decryption */
-	// cipher->decrypt(cipherText);	
+	else{
+		// cipher->decrypt(cipherText);	
+	}
 	
 	return 0;
 }
