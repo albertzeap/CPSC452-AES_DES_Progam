@@ -89,27 +89,34 @@ bool AES::setKey(const unsigned char* keyArray)
 	// Both functions return 0 on success and other values on faliure.
 	// For documentation, please see https://boringssl.googlesource.com/boringssl/+/2623/include/openssl/aes.h
 	// and aes.cpp example provided with the assignment.
-	
-	
-	// unsigned char aes_key[16];
-	// memset(aes_key, 0, 16);
 
 	unsigned char* aes_key = new unsigned char[16];
-	
-	// cout << "Size of Key Array: " << sizeof(keyArray) << "\n";
-	// cout << "Key Array: " << keyArray << "\n";
+	char* buffer;
+	int counter = 0;
 
-	for(int i = 1; i < 17; ++i){
-		aes_key[i - 1] = keyArray[i];
-		// cout << "Key Array[i]: " << keyArray[i] << "\n";
-		cout << "AES Key:      " << aes_key[i-1] << "\n";
+	//Traverse through the key elements
+	for (int i = 1; i < 32; i){
+
+		//Store two chars in temp string
+		string temp = "";
+		temp += keyArray[i-1];
+		temp += keyArray[i];
+
+		//Convert string to char*
+		buffer = &temp[0];		
+		
+		//Initialize aes_key with the hexBytes
+		if (counter < 16){
+			aes_key[counter] = twoCharToHexByte((unsigned char*)buffer);
+		}
+
+		//Increment counters
+		counter++;
+		i += 2;
+
 	}
 
-	/* AES-128 bit ECB Encryption key */
-	// AES_KEY enc_key, dec_key;
-	
-
-	if(keyArray[0] == 0){
+	if(aes_key[0] == 0){
 
 		/* Set the encryption key */
 		if(AES_set_encrypt_key(aes_key, 128, &enc_key)!= 0){

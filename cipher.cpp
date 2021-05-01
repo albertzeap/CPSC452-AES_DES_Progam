@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 	 * command line.
 	 */
 
-	
+
 	// cipher->setKey((unsigned char*)"0123456789abcdef");
 	cipher->setKey((unsigned char*)validKey);
 
