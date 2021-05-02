@@ -52,6 +52,12 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 
+	if(!fpOut)
+	{
+		perror("Cannot open the file for output.");
+		exit(1);
+	}
+
 	//Checks for proper mode before continuing program
 	if (cipherM != "ENC" && cipherM != "DEC"){
 		fprintf(stderr, "INVALID MODE: <ENC> || <DEC>\n");
@@ -139,9 +145,15 @@ int main(int argc, char** argv)
 		}
 	}
 
+
+
+
 	//Create AES object
 	if(cipherN == "AES"){
 		cout << "BLOCK CIPHER: AES\n";
+		
+		//Block to be read
+		unsigned char* block = new unsigned char[16];
 
 		//Checks if key is a valid length
 		if (cipherK.length() != 32){
@@ -149,13 +161,75 @@ int main(int argc, char** argv)
 			exit(-1);
 		}
 		else {
-
+			if(cipherM == "ENC"){
+				cipherK.insert(0, 1,'0'); 
+			}
+			if(cipherM == "DEC"){
+				cipherK.insert(0,1,'1');
+			}
+			
 			//Initializes the valid key
 			validKey = &cipherK[0];
 		}
 
+
 		//Create an AES object
 		cipher = new AES();
+
+		//Set key
+		cipher->setKey((unsigned char*)validKey);
+
+		if(cipherM == "ENC")
+		{
+
+			//read till end of file
+			unsigned char* cipherText = new unsigned char;
+			while(!feof(fpIn))
+			{
+				numRead = fread(block, 1, 16, fpIn);
+				//Not end of file yet
+				if(numRead != 0)
+				{
+					//Padding
+					if(numRead < 16)
+					{
+						memset(block+numRead, 0,16 - numRead);
+					}
+						cipherText = cipher->encrypt(block);
+						fwrite(cipherText, 1, 16, fpOut);
+						
+				}
+			}
+		}
+		else if(cipherM == "DEC")
+		{
+			//read till end of file
+			unsigned char* plainText = new unsigned char;
+			while(!feof(fpIn))
+			{
+				numRead = fread(block, 1, 16, fpIn);
+				//Not end of file yet
+				if(numRead != 0)
+				{
+					//Padding
+					if(numRead < 16)
+					{
+						memset(block+numRead, 0,16 - numRead);
+					}
+						plainText = cipher->decrypt(block);
+						fwrite(plainText, 1, 16, fpOut);
+		
+						
+				}
+			}
+		
+		}
+
+
+
+
+
+
 	}
 
 	/* Error checks */
@@ -176,20 +250,20 @@ int main(int argc, char** argv)
 
 
 	// cipher->setKey((unsigned char*)"0123456789abcdef");
-	cipher->setKey((unsigned char*)validKey);
+	// cipher->setKey((unsigned char*)validKey);
 
 
 	/* Perform encryption */
-	if (cipherM == "ENC"){
+	// if (cipherM == "ENC"){
 
 		// string cipherText = cipher->encrypt((unsigned char*)"hello world");
-		cipher->encrypt((unsigned char*)"helloworld123456");
-	}
+		// cipher->encrypt((unsigned char*)"helloworld123456");
+	// }
 
 	/* Perform decryption */
-	else{
+	// else{
 		// cipher->decrypt(cipherText);	
-	}
+	// }
 	
 	return 0;
 }

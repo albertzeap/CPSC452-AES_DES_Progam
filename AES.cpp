@@ -82,7 +82,7 @@ bool AES::setKey(const unsigned char* keyArray)
 	//
 	// One way to solve this problem is to pass in a 17 byte key, where
 	// the first byte is used to indicate whether we are encrypting or
-	// decrypting. E.g., if the first byte is 00, then use AES_set_encrypt_key(...).
+	// decrypting. E.g., if the first byte is 0, then use AES_set_encrypt_key(...).
 	// Otherwise, use AES_set_decrypt_key(...).  The rest of the bytes in the
 	// array indicate the 16 bytes of the 128-bit AES key.
 	//
@@ -94,8 +94,10 @@ bool AES::setKey(const unsigned char* keyArray)
 	char* buffer;
 	int counter = 0;
 
+	cout << "KEY: ";
+
 	//Traverse through the key elements
-	for (int i = 1; i < 32; i){
+	for (int i = 2; i < 33; i){
 
 		//Store two chars in temp string
 		string temp = "";
@@ -103,7 +105,9 @@ bool AES::setKey(const unsigned char* keyArray)
 		temp += keyArray[i];
 
 		//Convert string to char*
-		buffer = &temp[0];		
+		buffer = &temp[0];	
+
+		cout << buffer << " ";
 		
 		//Initialize aes_key with the hexBytes
 		if (counter < 16){
@@ -115,8 +119,9 @@ bool AES::setKey(const unsigned char* keyArray)
 		i += 2;
 
 	}
+	cout << "\n";
 
-	if(aes_key[0] == 0){
+	if(keyArray[0] == '0'){
 
 		/* Set the encryption key */
 		if(AES_set_encrypt_key(aes_key, 128, &enc_key)!= 0){
@@ -190,13 +195,19 @@ unsigned char* AES::decrypt(const unsigned char* cipherText)
 	// 	3. Return the pointer to the plaintext
 
 	//Buffers for string text
-	unsigned char* dec_out = new unsigned char;
+	unsigned char buffer[16];
+	unsigned char* dec_out = new unsigned char[16];
 
-	//Clear buffer
-	memset(dec_out, 0, 17);
+	//Clear the buffers
+	memset(buffer, 0, 16);
+	memset(dec_out, 0, 16);
 
 	// Decrypt!
-	AES_ecb_encrypt(cipherText, dec_out, &dec_key, AES_DECRYPT);
+	AES_ecb_encrypt(cipherText, buffer, &dec_key, AES_DECRYPT);
+
+	for(int i = 0; i < 16; ++i){
+		dec_out[i] = buffer[i];
+	}
 		
 	return dec_out;
 }
