@@ -37,16 +37,17 @@ int main(int argc, char** argv)
 	char* validKey;
 
 	//Create a file object to read the file
-	FILE* fp = fopen(cipherIP, "r");
+	FILE* fpIn = fopen(cipherIP, "r");
+	FILE* fpOut = fopen(cipherOP, "w");
 
 	//The buffer to store the read text
 	char buffer[17];
 
 	//The number of bytes read
-	int numRead = 0;
+	int numRead = -1;
 
 	//Checks if file was not opened
-	if(!fp){
+	if(!fpIn){
 		perror("fopen");
 		exit(-1);
 	}
@@ -71,6 +72,9 @@ int main(int argc, char** argv)
 	if(cipherN == "DES"){
 		cout << "BLOCK CIPHER: DES\n";
 
+		//Blocks to be read
+		unsigned char* block = new unsigned char[8];
+
 		//Checks if key is a valid length
 		if (cipherK.length() != 16){
 		fprintf(stderr, "INVALID KEY: Key needs to be 16 characters long\n");
@@ -84,6 +88,55 @@ int main(int argc, char** argv)
 
 		//Create a DES object
 		cipher = new DES();
+
+		//Set the key
+		cipher->setKey((unsigned char*)validKey);
+
+		if(cipherM == "ENC")
+		{
+
+			//read till end of file
+			unsigned char* cipherText = new unsigned char;
+			while(!feof(fpIn))
+			{
+				numRead = fread(block, 1, 8, fpIn);
+				//Not end of file yet
+				if(numRead != 0)
+				{
+					//Padding
+					if(numRead < 8)
+					{
+						memset(block+numRead, 0,8 - numRead);
+					}
+						cipherText = cipher->encrypt(block);
+						fwrite(cipherText, 1, 8, fpOut);
+						
+				}
+			}
+		}
+		else if(cipherM == "DEC")
+		{
+			//read till end of file
+			unsigned char* plainText = new unsigned char;
+			while(!feof(fpIn))
+			{
+				numRead = fread(block, 1, 8, fpIn);
+				//Not end of file yet
+				if(numRead != 0)
+				{
+					//Padding
+					if(numRead < 8)
+					{
+						memset(block+numRead, 0,8 - numRead);
+					}
+						plainText = cipher->decrypt(block);
+						fwrite(plainText, 1, 8, fpOut);
+		
+						
+				}
+			}
+		
+		}
 	}
 
 	//Create AES object
@@ -130,6 +183,7 @@ int main(int argc, char** argv)
 	if (cipherM == "ENC"){
 
 		// string cipherText = cipher->encrypt((unsigned char*)"hello world");
+		cipher->encrypt((unsigned char*)"helloworld123456");
 	}
 
 	/* Perform decryption */

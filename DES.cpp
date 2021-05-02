@@ -78,7 +78,42 @@ unsigned char* DES::encrypt(const unsigned char* plaintext)
 	// (e.g. unsigned char* bytes = new unsigned char[8]).
 	//8. Return the pointer to the dynamically allocated array.
 	
-	return NULL;
+	//1. Declare an array DES_LONG block[2];
+	DES_LONG textC[2];
+	unsigned char copyPT[8];
+	unsigned char encText[8];
+	int i = 0;
+	int j = 0;
+	while(i != 8)
+	{
+		copyPT[i] = plaintext[i]; 
+		i++;
+	}
+	//2. Use ctol() to convert the first 4 chars into long; store the result in block[0]
+	textC[0] = ctol(copyPT);
+	//3. Use ctol() to convert the second 4 chars into long; store the result in block[1]
+	textC[1] = ctol(copyPT + 4);
+	//4. Perform des_encrypt1 in order to encrypt the block using this->key (see sample codes for details)
+	//change DES
+	DES_encrypt1(textC, &key, 1);
+	memset(encText, 0, 9);
+	//5. Convert the first ciphertext long to 4 characters using ltoc()
+	
+	ltoc(textC[0], encText);
+	//6. Convert the second ciphertext long to 4 characters using ltoc()
+	ltoc(textC[1], encText + 4);
+	//7. Save the results in the dynamically allocated char array 
+	// (e.g. unsigned char* bytes = new unsigned char[8]).
+	unsigned char* finalText = new unsigned char[8];
+	
+	//8. Return the pointer to the dynamically allocated array.
+	while(j != 8)
+	{
+		finalText[j] = encText[j];
+		j++;
+	}
+	
+	return finalText;
 }
 
 /**
@@ -91,7 +126,44 @@ unsigned char* DES::decrypt(const unsigned char* ciphertext)
 	//LOGIC:
 	// Same logic as encrypt(), except in step 4. decrypt instead of encrypting
 	//
-	return NULL;
+	//=============================================
+	//1. Declare an array DES_LONG block[2];
+	DES_LONG textP[2];
+	unsigned char copyCT[8];
+	unsigned char decText[8];
+	int i = 0;
+	int j = 0;
+	while(i != 8)
+	{
+		copyCT[i] = ciphertext[i]; 
+		i++;
+	}
+	//2. Use ctol() to convert the first 4 chars into long; store the result in block[0]
+	textP[0] = ctol(copyCT);
+	//3. Use ctol() to convert the second 4 chars into long; store the result in block[1]
+	textP[1] = ctol(copyCT + 4);
+	//4. Perform des_encrypt1 in order to encrypt the block using this->key (see sample codes for details)
+	//change DES
+	DES_encrypt1(textP, &key, 0);
+	memset(decText, 0, 9);
+	//5. Convert the first ciphertext long to 4 characters using ltoc()
+	
+	ltoc(textP[0], decText);
+	//6. Convert the second ciphertext long to 4 characters using ltoc()
+	ltoc(textP[1], decText + 4);
+	//7. Save the results in the dynamically allocated char array 
+	// (e.g. unsigned char* bytes = new unsigned char[8]).
+	unsigned char* finalText = new unsigned char[8];
+	
+	//8. Return the pointer to the dynamically allocated array.
+	while(j != 8)
+	{
+		finalText[j] = decText[j];
+		j++;
+	}
+	
+	return finalText;
+	
 }
 
 /**
@@ -187,5 +259,3 @@ unsigned char DES::twoCharToHexByte(const unsigned char* twoChars)
 
 	return singleByte;
 }
-
-
