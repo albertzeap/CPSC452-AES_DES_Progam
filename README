@@ -1,12 +1,23 @@
-To compile, simply, type ''make'' at the terminal (without the quotes).
+CPSC 452 - Assignment 2
 
-Please do not forget to include a README file in your submission.
-It's worth 5 points.
+Authors: Albert Paez | albertzeap@csu.fullerton.edu
+		 Minh Tran   | mtran2019s@csu.fullerton.edu
+		 
+Language: C++
 
-Your README file should include:
+*******************************************************************
+Intructions to compile and execute code:
 
-– Names and email addresses of all partners.
-– The programming language you use (e.g. C++ or Java)
-– How to execute your program.
-– Whether you implemented the extra credit.
-– Anything special about your submission that we should take note of.
+1. To compile, type ''make'' at the terminal (without the quotes).
+2. To execute, follow the following format ./cipher <CIPHER NAME> <KEY> <ENC/DEC> <INPUTFILE> <OUTPUT FILE>
+
+*******************************************************************
+Cipher Available :
+ - DES: Data Encryption Standard
+ - AES: Advanced Encryption Standard
+ 
+Mode Available:
+ - ENC: Encryption
+ - DEC: Decryption
+ 
+Note: We did not implemented the extra credit cipher.
