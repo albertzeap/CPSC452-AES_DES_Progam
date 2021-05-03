@@ -162,7 +162,6 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	// 	3. Return the pointer to the ciphertext
 
 	//Buffers for string text
-	// unsigned char *enc_out = new unsigned char;
 	unsigned char buffer[16];
 	unsigned char* enc_out = new unsigned char[16];
 	
@@ -171,7 +170,6 @@ unsigned char* AES::encrypt(const unsigned char* plainText)
 	memset(buffer, 0, 16);
 
 	//Encrypt the text
-	// AES_ecb_encrypt(plainText, enc_out, &enc_key, AES_ENCRYPT);
 	AES_ecb_encrypt(plainText, buffer, &enc_key, AES_ENCRYPT);
 		
 	for (int i = 0; i < 16; ++i){

@@ -19,7 +19,6 @@ int main(int argc, char** argv)
 	 * misbehave.
 	 */
 		
-
 	//Error check the current command line arguments. Exits upon error
 	if(argc != 6){
 		fprintf(stderr, "Usage: <CIPHER NAME> <KEY> <ENC/DEC> <INPUTFILE> <OUTPUT FILE>\n");
@@ -145,9 +144,6 @@ int main(int argc, char** argv)
 		}
 	}
 
-
-
-
 	//Create AES object
 	if(cipherN == "AES"){
 		cout << "BLOCK CIPHER: AES\n";
@@ -224,12 +220,6 @@ int main(int argc, char** argv)
 			}
 		
 		}
-
-
-
-
-
-
 	}
 
 	/* Error checks */
@@ -239,31 +229,6 @@ int main(int argc, char** argv)
 		__FILE__, __FUNCTION__, __LINE__);
 		exit(-1);
 	}
-
-
-	/* Set the encryption key
-	 * A valid key comprises 16 hexidecimal
-	 * characters. Below is one example.
-	 * Your program should take input from
-	 * command line.
-	 */
-
-
-	// cipher->setKey((unsigned char*)"0123456789abcdef");
-	// cipher->setKey((unsigned char*)validKey);
-
-
-	/* Perform encryption */
-	// if (cipherM == "ENC"){
-
-		// string cipherText = cipher->encrypt((unsigned char*)"hello world");
-		// cipher->encrypt((unsigned char*)"helloworld123456");
-	// }
-
-	/* Perform decryption */
-	// else{
-		// cipher->decrypt(cipherText);	
-	// }
 	
 	return 0;
 }
