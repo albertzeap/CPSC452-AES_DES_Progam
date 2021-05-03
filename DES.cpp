@@ -24,6 +24,8 @@ bool DES::setKey(const unsigned char* keyArray)
 	
 	/* The DES key index */
 	int desKeyIndex = 0;
+
+	cout << "DES KEY: " << keyArray << "\n";
 		
 	/* Go through the entire key character by character */
 	while(desKeyIndex != 8)
